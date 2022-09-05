@@ -1,6 +1,6 @@
 export const theme = {
     colors: {
-        accent: 'red',
+        error: 'red',
     },
     borders: {
         none: 'none',

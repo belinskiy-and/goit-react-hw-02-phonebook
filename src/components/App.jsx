@@ -4,47 +4,44 @@ import Box from "./Box";
 import Phonebook from "./Phonebook";
 import Contacts from "./Contacts";
 
+const initialContacts = [
+  {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+  {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+  {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+  {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
+];
+
 export class App extends Component {
   // State
   state = {
-    contacts: [
-      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-    ],
+    contacts: initialContacts,
     filter: '',
   };
 
   // Methods
+  isIncludes = value =>
+    this.state.contacts.find(contact => contact.name.toLowerCase() === value.toLowerCase());      
+  
   handleInputChange = e => {
     const { name, value } = e.target;
     this.setState({[name]: value});
-  };
+  }
 
-  isIncludes = value =>
-    this.state.contacts.find(contact => contact.name.toLowerCase() === value.toLowerCase());      
-
-  handleSubmit = e => {
-    e.preventDefault();
-
-    const { name, number } = this.state;
-
-     if (this.isIncludes(name)) {
+  formSubmitHandle = ({ name, number }) => {
+    if (this.isIncludes(name)) {
       alert(`${name} is olready in contacts`);
      } else {
-      this.setState(prevState => ({            
-        contacts: [...prevState.contacts, {name, id: nanoid(), number: number}],
-        name: "",
-        number: "",      
+      const id = nanoid(); 
+      this.setState(prevState => ({                   
+        contacts: [...prevState.contacts, {id, name, number}],      
       }));
-    }
-  }
+    }  
+  };
 
   // Render
   render() {
 
-    const { number, name, contacts, filter} = this.state;
+    const { contacts, filter} = this.state;
 
     const normalizeFilter = filter.toLowerCase();
 
@@ -57,7 +54,7 @@ export class App extends Component {
         width="width"        
         as='main'
       >
-        <Phonebook number={number} name={name} onChange={this.handleInputChange} onSubmit={this.handleSubmit} />
+        <Phonebook onSubmit={this.formSubmitHandle} />
         <Contacts contacts={visibleContacts} filter={filter} onChange={this.handleInputChange} />
       </Box>
     );
