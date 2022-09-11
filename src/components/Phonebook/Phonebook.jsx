@@ -16,8 +16,9 @@ const schema = yup.object().shape({
 
 class Phonebook extends Component {
 
-    onSubmit = (values, actions) => {
+    onSubmit = (values, {resetForm}) => {
         this.props.onSubmit(values);
+        resetForm();
     }
 
     render(){
